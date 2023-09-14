@@ -1,0 +1,15 @@
+E:\reposD\SAE\StudyinAppEntity\StudyinAppEntity\bin\Debug\net7.0\StudyinAppEntity.exe
+E:\reposD\SAE\StudyinAppEntity\StudyinAppEntity\bin\Debug\net7.0\StudyinAppEntity.deps.json
+E:\reposD\SAE\StudyinAppEntity\StudyinAppEntity\bin\Debug\net7.0\StudyinAppEntity.runtimeconfig.json
+E:\reposD\SAE\StudyinAppEntity\StudyinAppEntity\bin\Debug\net7.0\StudyinAppEntity.dll
+E:\reposD\SAE\StudyinAppEntity\StudyinAppEntity\bin\Debug\net7.0\StudyinAppEntity.pdb
+E:\reposD\SAE\StudyinAppEntity\StudyinAppEntity\obj\Debug\net7.0\StudyinAppEntity.csproj.AssemblyReference.cache
+E:\reposD\SAE\StudyinAppEntity\StudyinAppEntity\obj\Debug\net7.0\StudyinAppEntity.GeneratedMSBuildEditorConfig.editorconfig
+E:\reposD\SAE\StudyinAppEntity\StudyinAppEntity\obj\Debug\net7.0\StudyinAppEntity.AssemblyInfoInputs.cache
+E:\reposD\SAE\StudyinAppEntity\StudyinAppEntity\obj\Debug\net7.0\StudyinAppEntity.AssemblyInfo.cs
+E:\reposD\SAE\StudyinAppEntity\StudyinAppEntity\obj\Debug\net7.0\StudyinAppEntity.csproj.CoreCompileInputs.cache
+E:\reposD\SAE\StudyinAppEntity\StudyinAppEntity\obj\Debug\net7.0\StudyinAppEntity.dll
+E:\reposD\SAE\StudyinAppEntity\StudyinAppEntity\obj\Debug\net7.0\refint\StudyinAppEntity.dll
+E:\reposD\SAE\StudyinAppEntity\StudyinAppEntity\obj\Debug\net7.0\StudyinAppEntity.pdb
+E:\reposD\SAE\StudyinAppEntity\StudyinAppEntity\obj\Debug\net7.0\StudyinAppEntity.genruntimeconfig.cache
+E:\reposD\SAE\StudyinAppEntity\StudyinAppEntity\obj\Debug\net7.0\ref\StudyinAppEntity.dll

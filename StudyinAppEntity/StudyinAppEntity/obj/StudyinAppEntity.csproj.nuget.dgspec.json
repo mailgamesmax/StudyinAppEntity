@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Maksim\\source\\repos\\SAE\\StudyinAppEntity\\StudyinAppEntity\\StudyinAppEntity.csproj": {}
+    "E:\\reposD\\SAE\\StudyinAppEntity\\StudyinAppEntity\\StudyinAppEntity.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Maksim\\source\\repos\\SAE\\StudyinAppEntity\\StudyinAppEntity\\StudyinAppEntity.csproj": {
+    "E:\\reposD\\SAE\\StudyinAppEntity\\StudyinAppEntity\\StudyinAppEntity.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Maksim\\source\\repos\\SAE\\StudyinAppEntity\\StudyinAppEntity\\StudyinAppEntity.csproj",
+        "projectUniqueName": "E:\\reposD\\SAE\\StudyinAppEntity\\StudyinAppEntity\\StudyinAppEntity.csproj",
         "projectName": "StudyinAppEntity",
-        "projectPath": "C:\\Users\\Maksim\\source\\repos\\SAE\\StudyinAppEntity\\StudyinAppEntity\\StudyinAppEntity.csproj",
+        "projectPath": "E:\\reposD\\SAE\\StudyinAppEntity\\StudyinAppEntity\\StudyinAppEntity.csproj",
         "packagesPath": "C:\\Users\\Maksim\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Maksim\\source\\repos\\SAE\\StudyinAppEntity\\StudyinAppEntity\\obj\\",
+        "outputPath": "E:\\reposD\\SAE\\StudyinAppEntity\\StudyinAppEntity\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Maksim\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -39,6 +39,22 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.Proxies": {
+              "target": "Package",
+              "version": "[7.0.11, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[7.0.11, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.11, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
