@@ -10,7 +10,7 @@ namespace StudyinAppEntity.Models
     [Table("Students and Subjects")]
     internal class StudentSubject
     {
-        
+
         public string StudentID { get; set; }
         public Student Student { get; set; }
 
