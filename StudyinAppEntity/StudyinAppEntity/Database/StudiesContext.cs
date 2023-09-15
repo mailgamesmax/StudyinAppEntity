@@ -45,9 +45,13 @@ namespace StudyinAppEntity.Database
                 .HasOne<Subject>(ab => ab.Subject) //nuoroda i sukurga nav.fielda
                 .WithMany(b => b.SubjectFaculties) //nuoroda i 1toMany rysi
                 .HasForeignKey(ab => ab.SubjectID);
+<<<<<<< HEAD
             
             
             modelBuilder.Entity<StudentSubject>().HasKey(ab => new { ab.StudentID, ab.SubjectID });
+=======
+
+>>>>>>> 459e5489078cb0675b0b1eeb9d2fa739fac65d51
 
             modelBuilder.Entity<StudentSubject>()
                 .HasOne<Student>(ab => ab.Student) 
