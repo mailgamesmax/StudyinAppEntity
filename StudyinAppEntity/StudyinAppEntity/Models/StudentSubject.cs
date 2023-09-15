@@ -11,17 +11,10 @@ namespace StudyinAppEntity.Models
     internal class StudentSubject
     {
 
-<<<<<<< HEAD
         public Guid StudentID { get; set; }
         public Student Student { get; set; }
 
         public int SubjectID { get; set; }
-=======
-        public string StudentID { get; set; }
-        public Student Student { get; set; }
-
-        public string SubjectID { get; set; }
->>>>>>> 459e5489078cb0675b0b1eeb9d2fa739fac65d51
         public Subject Subject { get; set; }
     }
 }
