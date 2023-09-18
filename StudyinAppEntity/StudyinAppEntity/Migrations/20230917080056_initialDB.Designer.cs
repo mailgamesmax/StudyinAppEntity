@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudyinAppEntity.Database;
 
@@ -11,9 +12,11 @@ using StudyinAppEntity.Database;
 namespace StudyinAppEntity.Migrations
 {
     [DbContext(typeof(StudiesContext))]
-    partial class StudiesContextModelSnapshot : ModelSnapshot
+    [Migration("20230917080056_initialDB")]
+    partial class initialDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,40 +27,20 @@ namespace StudyinAppEntity.Migrations
 
             modelBuilder.Entity("StudyinAppEntity.Models.Faculty", b =>
                 {
-                    b.Property<int>("Fac_Id")
+                    b.Property<int>("F_id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Fac_Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("F_id"));
 
                     b.Property<string>("Direction")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Direction(like Title)");
 
-                    b.HasKey("Fac_Id");
+                    b.HasKey("F_id");
 
                     b.ToTable("FacultiesTable");
-                });
-
-            modelBuilder.Entity("StudyinAppEntity.Models.FacultyStudentSubject", b =>
-                {
-                    b.Property<int>("FacultyID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubjectID")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("StudentID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("FacultyID", "SubjectID", "StudentID");
-
-                    b.HasIndex("StudentID");
-
-                    b.HasIndex("SubjectID");
-
-                    b.ToTable("Faculties, Students and Subjects");
                 });
 
             modelBuilder.Entity("StudyinAppEntity.Models.FacultySubject", b =>
@@ -82,17 +65,14 @@ namespace StudyinAppEntity.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(3);
 
-                    b.Property<string>("Direction")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Student's Faculty");
-
                     b.Property<int>("F_id")
                         .HasColumnType("int")
                         .HasColumnName("Faculty ID");
 
-                    b.Property<int>("FacultyFac_Id")
-                        .HasColumnType("int");
+                    b.Property<string>("FacultyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Student's Faculty");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -103,9 +83,24 @@ namespace StudyinAppEntity.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FacultyFac_Id");
+                    b.HasIndex("F_id");
 
                     b.ToTable("StudentsTable");
+                });
+
+            modelBuilder.Entity("StudyinAppEntity.Models.StudentSubject", b =>
+                {
+                    b.Property<Guid>("StudentID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SubjectID")
+                        .HasColumnType("int");
+
+                    b.HasKey("StudentID", "SubjectID");
+
+                    b.HasIndex("SubjectID");
+
+                    b.ToTable("Students and Subjects");
                 });
 
             modelBuilder.Entity("StudyinAppEntity.Models.Subject", b =>
@@ -116,57 +111,25 @@ namespace StudyinAppEntity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid?>("StudentId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StudentId");
-
                     b.ToTable("SubjectsTable");
-                });
-
-            modelBuilder.Entity("StudyinAppEntity.Models.FacultyStudentSubject", b =>
-                {
-                    b.HasOne("StudyinAppEntity.Models.Faculty", "Faculty")
-                        .WithMany("FacultiesStudentsSubjects")
-                        .HasForeignKey("FacultyID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("StudyinAppEntity.Models.Student", "Student")
-                        .WithMany("FacultiesStudentsSubjects")
-                        .HasForeignKey("StudentID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("StudyinAppEntity.Models.Subject", "Subject")
-                        .WithMany("FacultiesStudentsSubjects")
-                        .HasForeignKey("SubjectID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Faculty");
-
-                    b.Navigation("Student");
-
-                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("StudyinAppEntity.Models.FacultySubject", b =>
                 {
                     b.HasOne("StudyinAppEntity.Models.Faculty", "Faculty")
-                        .WithMany("FacultiesSubjects")
+                        .WithMany("FacultySubjects")
                         .HasForeignKey("FacultyID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("StudyinAppEntity.Models.Subject", "Subject")
-                        .WithMany("FacultiesSubjects")
+                        .WithMany("SubjectFaculties")
                         .HasForeignKey("SubjectID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -180,41 +143,49 @@ namespace StudyinAppEntity.Migrations
                 {
                     b.HasOne("StudyinAppEntity.Models.Faculty", "Faculty")
                         .WithMany("FacultyStudents")
-                        .HasForeignKey("FacultyFac_Id")
+                        .HasForeignKey("F_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Faculty");
                 });
 
-            modelBuilder.Entity("StudyinAppEntity.Models.Subject", b =>
+            modelBuilder.Entity("StudyinAppEntity.Models.StudentSubject", b =>
                 {
-                    b.HasOne("StudyinAppEntity.Models.Student", null)
+                    b.HasOne("StudyinAppEntity.Models.Student", "Student")
                         .WithMany("StudentSubjects")
-                        .HasForeignKey("StudentId");
+                        .HasForeignKey("StudentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StudyinAppEntity.Models.Subject", "Subject")
+                        .WithMany("SubjectStudents")
+                        .HasForeignKey("SubjectID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("StudyinAppEntity.Models.Faculty", b =>
                 {
-                    b.Navigation("FacultiesStudentsSubjects");
-
-                    b.Navigation("FacultiesSubjects");
-
                     b.Navigation("FacultyStudents");
+
+                    b.Navigation("FacultySubjects");
                 });
 
             modelBuilder.Entity("StudyinAppEntity.Models.Student", b =>
                 {
-                    b.Navigation("FacultiesStudentsSubjects");
-
                     b.Navigation("StudentSubjects");
                 });
 
             modelBuilder.Entity("StudyinAppEntity.Models.Subject", b =>
                 {
-                    b.Navigation("FacultiesStudentsSubjects");
+                    b.Navigation("SubjectFaculties");
 
-                    b.Navigation("FacultiesSubjects");
+                    b.Navigation("SubjectStudents");
                 });
 #pragma warning restore 612, 618
         }

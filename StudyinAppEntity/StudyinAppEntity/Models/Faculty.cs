@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace StudyinAppEntity.Models
 {
-    internal class Faculty
+    internal class Faculty : CommonFunctions
     {
         public void AddFaculty()
         {
@@ -17,9 +17,11 @@ namespace StudyinAppEntity.Models
             
             Console.Write("Fakulteto krytpis/pavadinimas? ");
             string inputDirection = Console.ReadLine();
-            int newID = idEasyGenerator();
-                        
-            var faculty = context.FacultiesTable.Add(new Faculty(newID, inputDirection));
+            //int newID = idEasyGenerator();
+
+            //var newFaculty = new Faculty(newID, inputDirection);
+            var newFaculty = new Faculty(inputDirection);
+            var facultyToTable = context.FacultiesTable.Add(newFaculty);
             context.SaveChanges();
         }
 
@@ -27,10 +29,11 @@ namespace StudyinAppEntity.Models
         {
             int newID;
             var faculty = new StudiesContext();
-            var currentMaxID = faculty.FacultiesTable.Max(f => f.Id);
+            
 
-            if (currentMaxID > 0)
+            if (faculty.FacultiesTable.Any())
             {
+                var currentMaxID = faculty.FacultiesTable.Max(f => f.Fac_Id);
                 newID = currentMaxID + 1;
                 return newID;
             }
@@ -42,33 +45,35 @@ namespace StudyinAppEntity.Models
             }
         }
 
-        public IList<FacultySubject> selectFacultySubjects(string direction ) 
+        public Faculty SelectFacultyByDirection(string direction) 
         {
             using var context = new StudiesContext();
-            var facultySubjects = context.FacultiesTable.FirstOrDefault(f => f.Direction == direction);
-            return facultySubjects.FacultySubjects;
+            var facultyByDirection = context.FacultiesTable.FirstOrDefault(f => f.Direction == direction);
+            return facultyByDirection;
         }
 
         // savybes ir konstruktoriai
         public Faculty() { }
-        public Faculty(int id, string direction)
+        //public Faculty(int id, string direction)
+        public Faculty(string direction)
         {
-            Id = id;
+            //Fac_Id = id;
             Direction = direction;
 /*            FacultyStudents = facultyStudents;
             FacultySubjects = facultySubjects;
 */        }
 
         [Key]
-        public int Id { get; set; }
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Fac_Id { get; set; }
 
         [Column("Direction(like Title)")]
         public string Direction { get; set; } // instead of name
-        public List<Student> FacultyStudents { get; set; } = new List<Student>();
+        public IList<Student> FacultyStudents { get; set; } = new List<Student>();
 
         //public static List<Faculty> AllFaculties { get; set; } = new List<Faculty>();
 
-        public IList<FacultySubject> FacultySubjects { get; set; } = new List<FacultySubject>();
-        //public IList<Subject> FacultySubjects { get; set; }
+        public IList<FacultyStudentSubject> FacultiesStudentsSubjects { get; set; } = new List<FacultyStudentSubject>();
+        public IList<FacultySubject> FacultiesSubjects { get; set; } = new List<FacultySubject>();
     }
 }

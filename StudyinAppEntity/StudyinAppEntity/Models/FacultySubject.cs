@@ -11,10 +11,25 @@ namespace StudyinAppEntity.Models
     [Table("Faculties and Subjects")]
     internal class FacultySubject
     {
+
+        //savybes ir konstruktoriai
+        public FacultySubject() { }
+        public FacultySubject(Faculty faculty, Subject subject)
+        {
+            Faculty = faculty;
+            Subject = subject;
+        }
+        public FacultySubject(int facultyID, int subjectID, Faculty faculty, Subject subject) : this(faculty, subject)
+        {
+            FacultyID = facultyID;
+            SubjectID = subjectID;
+        }
+
         public int FacultyID { get; set; }
         public Faculty Faculty { get; set; }
 
         public int SubjectID { get; set; }
         public Subject Subject { get; set; }
+
     }
 }
