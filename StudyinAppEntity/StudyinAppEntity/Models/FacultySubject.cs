@@ -19,7 +19,7 @@ namespace StudyinAppEntity.Models
             Faculty = faculty;
             Subject = subject;
         }
-        public FacultySubject(int facultyID, int subjectID, Faculty faculty, Subject subject) : this(faculty, subject)
+        public FacultySubject(Faculty faculty, Subject subject, int facultyID, int subjectID) : this(faculty, subject)
         {
             FacultyID = facultyID;
             SubjectID = subjectID;
@@ -30,6 +30,5 @@ namespace StudyinAppEntity.Models
 
         public int SubjectID { get; set; }
         public Subject Subject { get; set; }
-
     }
 }

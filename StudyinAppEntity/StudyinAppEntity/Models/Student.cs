@@ -24,16 +24,19 @@ namespace StudyinAppEntity.Models
 
             using var context = new StudiesContext();
 
-            var faculty = new Faculty();
-            var selectFaculty = faculty.SelectFacultyByDirection(direction);
-            //var selectedFaculty = context.FacultiesTable.FirstOrDefault(f => f.Direction == direction);
-//            int facultyID = selectFaculty.Fac_Id;
-            //var newStudent = context.StudentsTable.Add(new Student(name, direction));
-            var newStudent = new Student(name, direction, selectFaculty.Fac_Id, selectFaculty);
+                var selectedFaculty = context.FacultiesTable.FirstOrDefault(f => f.Direction == direction);
 
-            var student = context.StudentsTable.Add(newStudent);
-                context.SaveChanges();
-            //AddSubjectsToStudent(newStudent, selectFaculty);
+                if (selectedFaculty != null)
+                {
+                    var newStudent = new Student(name, direction);
+                    selectedFaculty.FacultyStudents.Add(newStudent);
+
+                    context.SaveChanges();
+                }
+                else
+                {
+                    Console.WriteLine("Fakultetas nerastas");
+                }
 
                 Console.Write("dar vienas? (+)");
                 inputChoice = Console.ReadLine();
@@ -41,22 +44,52 @@ namespace StudyinAppEntity.Models
             while (inputChoice == "+");
         }
 
-        public void AddSubjectsToStudent(Student student, Faculty faculty)
+        public void changeStudentFaculty() 
+        {
+            Console.Write("Stud name? (personal id better....) ");
+            string inputedName = Console.ReadLine();
+            Console.Write("New fac nr? ");
+            int inputedFac = int.Parse(Console.ReadLine());
+
+            using var context = new StudiesContext();
+
+            var targetStudent = context.StudentsTable.FirstOrDefault(f => f.Name == inputedName);
+            var targetFac = context.FacultiesTable.Find(inputedFac);
+           
+            var currentDepartment = context.FacultiesTable.FirstOrDefault(f => f.Fac_Id == targetStudent.Fac_Id);
+            if (currentDepartment != null)
+            {
+                currentDepartment.FacultyStudents.Remove(targetStudent);
+            }
+            
+            targetFac.FacultyStudents.Add(targetStudent);
+            
+            context.SaveChanges();
+
+        }
+        public Faculty SelectFacultyByDirection(string direction)
         {
             using var context = new StudiesContext();
+            var facultyByDirection = context.FacultiesTable.FirstOrDefault(f => f.Direction == direction);
+            return facultyByDirection;
+        }
+
+        public void AddSubjectsToStudent(Student student, Faculty faculty)
+        {
+/*            using var context = new StudiesContext();
             var subject = new Subject();
 
 //            var selectedFaculty = context.FacultiesTable.FirstOrDefault(f => f.Fac_Id == facultyID);
             
  //           var selectedStudent = context.StudentsTable.FirstOrDefault(s => s.Id == studentID);
 
-            var selectedSubjects = subject.SelectStudiesByFaculty(faculty.Fac_Id);
+            var selectedSubjects = subject.SelectSubjectsByFaculty(faculty.Fac_Id);
             foreach (var sItem in selectedSubjects) 
             {
-                var newStudentFacultySubject = new FacultyStudentSubject(faculty.Fac_Id, sItem.Id, student.Id, faculty, subject, student);
+                var newStudentFacultySubject = new FacultyStudentSubject(faculty.Fac_Id, sItem.Id, student.S_Id, faculty, subject, student);
                 var studentFacultySubject = context.Add(newStudentFacultySubject);
                 context.SaveChanges();
-            }
+            }*/
         }
 
         public void RemoveSubjectsFromStudent(Guid studentID, int facultyID)
@@ -89,44 +122,33 @@ namespace StudyinAppEntity.Models
                         context.SaveChanges();
                     }*/
 
+        // savybes ir konstruktoriai
         public Student() { }
         public Student(string name, string direction)
         {
+            PersonalId = Guid.NewGuid();
             Name = name;
             Direction = direction;
         }
 
-        public Student(string name, string direction, int facultyID, Faculty faculty) : this(name, direction)
-        {
-            F_id = facultyID;
-            Faculty = faculty;
-        }
+        [Key]
+        [Column(Order = 0 )]
+        public int S_Id { get; set; }
 
+        [Column(Order = 2)]
+        public Guid PersonalId { get; set; }
 
-        // savybes ir konstruktoriai
-
-        //[Key]     
-        [Column(Order = 3)]
-        public Guid Id { get; set; }
-
-        [Column("Student name", Order = 0)]
+        [Column("Student name", Order = 1)]
         [MaxLength(100)]        
         public string Name { get; set; }
         [Required]
               
         [Column("Student's Faculty")]
         public string Direction { get; set; }
-        
-        [Column("Faculty ID")]
-        public int F_id{ get; set; }
+
+        [ForeignKey("FacID")]
+        public int Fac_Id { get; set; }
         public Faculty Faculty { get; set; }
-        
-        [Column("Student Subjects")]
-        public IList<Subject> StudentSubjects { get; set; } = new List<Subject>();
-        public IList<FacultyStudentSubject> FacultiesStudentsSubjects { get; set; } = new List<FacultyStudentSubject>();
-        
-        //public static List<Student> AllStudents { get; set;} = new List<Student>();
-
-
+              
     }
 }

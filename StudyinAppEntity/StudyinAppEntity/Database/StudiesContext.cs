@@ -16,10 +16,9 @@ namespace StudyinAppEntity.Database
         }
         public string ConnectionString { get; set; }
 
-        public DbSet<Student> StudentsTable { get; set; } //tokie pavadinimai mokymosi tikslais
         public DbSet<Faculty> FacultiesTable { get; set; }
+        public DbSet<Student> StudentsTable { get; set; } //tokie pavadinimai mokymosi tikslais
         public DbSet<Subject> SubjectsTable { get; set; }
-        public DbSet<FacultyStudentSubject> FacultiesStudentsSubjectsTable { get; set; }
         public DbSet<FacultySubject> FacultiesSubjectsTable { get; set; }
 
         // kodo ir duombazes komunikavimo organizavimas
@@ -32,42 +31,28 @@ namespace StudyinAppEntity.Database
         // klasiu, ju relationshipu ir pan valdymas
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // student-faculty 1toM
+            modelBuilder.Entity<Faculty>()
+                .HasMany(f => f.FacultyStudents)
+                .WithOne(s => s.Faculty)
+                .HasForeignKey(s => s.Fac_Id);
+
             //kuriamas bendrinis id
-            modelBuilder.Entity<FacultyStudentSubject>().HasKey(abc => new { abc.FacultyID, abc.SubjectID, abc.StudentID }); //bendro id konfiguracija
-
-            modelBuilder.Entity<FacultyStudentSubject>()
-                .HasOne<Faculty>(abc => abc.Faculty) //nuoroda i sukurga nav.fielda
-                .WithMany(a => a.FacultiesStudentsSubjects) //nuoroda i 1toMany rysi
-                .HasForeignKey(abc => abc.FacultyID)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<FacultyStudentSubject>()
-                .HasOne<Subject>(abc => abc.Subject) //nuoroda i sukurga nav.fielda
-                .WithMany(b => b.FacultiesStudentsSubjects) //nuoroda i 1toMany rysi
-                .HasForeignKey(abc => abc.SubjectID)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<FacultyStudentSubject>()
-                .HasOne<Student>(abc => abc.Student) //nuoroda i sukurga nav.fielda
-                .WithMany(c => c.FacultiesStudentsSubjects) //nuoroda i 1toMany rysi
-                .HasForeignKey(abc => abc.StudentID)
-                .OnDelete(DeleteBehavior.Restrict);
-            //
             modelBuilder.Entity<FacultySubject>().HasKey(ab => new { ab.FacultyID, ab.SubjectID });
 
             modelBuilder.Entity<FacultySubject>()
-                .HasOne<Faculty>(ab => ab.Faculty) 
-                .WithMany(a => a.FacultiesSubjects) 
+                .HasOne<Faculty>(ab => ab.Faculty)
+                .WithMany(a => a.FacultiesSubjects)
                 .HasForeignKey(ab => ab.FacultyID);
 
             modelBuilder.Entity<FacultySubject>()
-                .HasOne<Subject>(ab => ab.Subject) 
-                .WithMany(b => b.FacultiesSubjects) 
+                .HasOne<Subject>(ab => ab.Subject)
+                .WithMany(b => b.FacultiesSubjects)
                 .HasForeignKey(ab => ab.SubjectID);
 
 
-            //base.OnModelCreating(modelBuilder);
         }
+            
 
         //public DbSet<Student> { get; set; }
         //public DbSet<Student>

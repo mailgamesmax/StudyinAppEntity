@@ -24,11 +24,11 @@ namespace StudyinAppEntity.Models
             Console.Write("Naujo dalyko pavadinimas? ");
             string inputTitle = NormalizeInputForTitle()[0];
 
-            var subject = context.SubjectsTable.Add(new Subject(inputTitle));
+            var newSubject = new Subject(inputTitle);
+            context.SubjectsTable.Add(newSubject);
             context.SaveChanges();
                 
-            int newID = SubjectIdGetterByTitle(inputTitle);
-
+            int newID = newSubject.Id;
             AddSubjecToFaculty(newID);
 
             Console.Write("dar vienas? (+)");
@@ -37,13 +37,7 @@ namespace StudyinAppEntity.Models
             while (inputChoice == "+");
         }
 
-        public int SubjectIdGetterByTitle(string title)
-        {
-            using var context = new StudiesContext();
-            var selectedSubject = context.SubjectsTable.FirstOrDefault(abc => abc.Title == title);
-            int subjectID = selectedSubject.Id;
-            return subjectID;
-        }
+
 
         public void AddSubjecToFaculty(int subjectID) 
         {
@@ -52,26 +46,39 @@ namespace StudyinAppEntity.Models
 
             using var context = new StudiesContext();
 
+            var selectedSubject = context.SubjectsTable.Find(subjectID);
+
             foreach (var inputedNr in inputedFaculties)
             {                
-            var selectedFaculty = context.FacultiesTable.FirstOrDefault(f => f.Fac_Id == inputedNr);
+            var selectedFaculty = context.FacultiesTable.Find(inputedNr);
 
-            var selectedSubject = context.SubjectsTable.FirstOrDefault(s => s.Id == subjectID);
+                if (selectedFaculty != null)
+                {                    
+                    var newFacultySubject = new FacultySubject(selectedFaculty,selectedSubject);
+                    selectedFaculty.FacultiesSubjects.Add(newFacultySubject);
+                    context.SaveChanges();
+                }
+                //            new FacultySubject(selectedFaculty, selectedSubject, inputedNr,  subjectID);
 
-            var newFacultySubject = new FacultySubject(inputedNr,  subjectID, selectedFaculty, selectedSubject);
-
-            selectedFaculty.FacultiesSubjects.Add(newFacultySubject);
-
-            context.SaveChanges();
+                //selectedFaculty.FacultiesSubjects.Add(selectedSubject);
+                context.SaveChanges();
             }        
         }
 
-        public List<Subject> SelectStudiesByFaculty(int facultyID) 
+
+        public int SubjectIdGetterByTitle(string title)
         {
             using var context = new StudiesContext();
-            var selectedSubjects = context.FacultiesSubjectsTable.Where(ab => ab.FacultyID == facultyID).Select(ab => ab.Subject).ToList();
-            return selectedSubjects;
+            var selectedSubject = context.SubjectsTable.FirstOrDefault(a => a.Title == title);
+            int subjectID = selectedSubject.Id;
+            return subjectID;
         }
+        /*        public List<Subject> SelectSubjectsByFaculty(int facultyID) 
+                {
+                    using var context = new StudiesContext();
+                    var selectedSubjects = context.FacultiesSubjectsTable.Where(ab => ab.FacultyID == facultyID).Select(ab => ab.Subject).ToList();
+                    return selectedSubjects;
+                }*/
 
 
         // savybes ir konstruktoriai
@@ -87,11 +94,13 @@ namespace StudyinAppEntity.Models
         [Key]
         public int Id { get; set; }
         public string Title { get; set; }
-        //public string FacultyID { get; set; }                
-
-        public IList<FacultyStudentSubject> FacultiesStudentsSubjects { get; set; } = new List<FacultyStudentSubject>();
+        //public int FacultyID { get; set; }                
 
         public IList<FacultySubject> FacultiesSubjects { get; set; } = new List<FacultySubject>();
+        public IList<Faculty> Faculties
+        {
+            get { return FacultiesSubjects.Select(fs => fs.Faculty).ToList(); }
+        }
 
     }
 }

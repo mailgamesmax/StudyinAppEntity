@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudyinAppEntity.Database;
 
@@ -11,9 +12,11 @@ using StudyinAppEntity.Database;
 namespace StudyinAppEntity.Migrations
 {
     [DbContext(typeof(StudiesContext))]
-    partial class StudiesContextModelSnapshot : ModelSnapshot
+    [Migration("20230920095500_initialDB")]
+    partial class initialDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,12 +38,7 @@ namespace StudyinAppEntity.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Direction(like Title)");
 
-                    b.Property<int?>("SubjectId")
-                        .HasColumnType("int");
-
                     b.HasKey("Fac_Id");
-
-                    b.HasIndex("SubjectId");
 
                     b.ToTable("FacultiesTable");
                 });
@@ -112,13 +110,6 @@ namespace StudyinAppEntity.Migrations
                     b.ToTable("SubjectsTable");
                 });
 
-            modelBuilder.Entity("StudyinAppEntity.Models.Faculty", b =>
-                {
-                    b.HasOne("StudyinAppEntity.Models.Subject", null)
-                        .WithMany("Faculties")
-                        .HasForeignKey("SubjectId");
-                });
-
             modelBuilder.Entity("StudyinAppEntity.Models.FacultySubject", b =>
                 {
                     b.HasOne("StudyinAppEntity.Models.Faculty", "Faculty")
@@ -158,8 +149,6 @@ namespace StudyinAppEntity.Migrations
 
             modelBuilder.Entity("StudyinAppEntity.Models.Subject", b =>
                 {
-                    b.Navigation("Faculties");
-
                     b.Navigation("FacultiesSubjects");
                 });
 #pragma warning restore 612, 618
