@@ -30,8 +30,8 @@ namespace StudyinAppEntity.Models
                 {
                     var newStudent = new Student(name, direction);
                     selectedFaculty.FacultyStudents.Add(newStudent);
-
                     context.SaveChanges();
+                    AssignStudentToSubject(name, selectedFaculty.Fac_Id);
                 }
                 else
                 {
@@ -57,13 +57,44 @@ namespace StudyinAppEntity.Models
             var targetFac = context.FacultiesTable.Find(inputedFac);
            
             var currentDepartment = context.FacultiesTable.FirstOrDefault(f => f.Fac_Id == targetStudent.Fac_Id);
+            
             if (currentDepartment != null)
             {
                 currentDepartment.FacultyStudents.Remove(targetStudent);
             }
             
+            targetFac.FacultyStudents.Add(targetStudent);            
+            context.SaveChanges();
+
+            var currentStudies = context.StudentSubjectTable.Where(ss => ss.Student == targetStudent);
+            context.StudentSubjectTable.RemoveRange(currentStudies);
+            context.SaveChanges();
+            AssignStudentToSubject(inputedName, targetFac.Fac_Id);
+            context.SaveChanges();
+
+        }
+
+        public void AssignStudentToSubject(string name, int facID) 
+        {
+            using var context = new StudiesContext();
+
+            var targetStudent = context.StudentsTable.FirstOrDefault(f => f.Name == name);
+            var targetFac = context.FacultiesTable.Find(facID);
+
+            var facultySubejcts = context.FacultiesSubjectsTable.Where(fs => fs.FacultyID ==  facID).Select(fs => fs.Subject).ToList();
+                //FacultiesTable.FirstOrDefault(f => f.Fac_Id == targetStudent.Fac_Id);
+            if (facultySubejcts != null)
+            {
+                foreach (var subject in facultySubejcts) 
+                {
+                    var newStudentSubject = new StudentSubject(targetStudent, subject);
+                    context.StudentSubjectTable.Add(newStudentSubject);
+                }
+                
+            }
+
             targetFac.FacultyStudents.Add(targetStudent);
-            
+
             context.SaveChanges();
 
         }
@@ -149,6 +180,8 @@ namespace StudyinAppEntity.Models
         [ForeignKey("FacID")]
         public int Fac_Id { get; set; }
         public Faculty Faculty { get; set; }
-              
+
+        public IList<StudentSubject> StudentSubjects { get; set; } = new List<StudentSubject>();
+
     }
 }

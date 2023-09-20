@@ -20,6 +20,8 @@ namespace StudyinAppEntity.Database
         public DbSet<Student> StudentsTable { get; set; } //tokie pavadinimai mokymosi tikslais
         public DbSet<Subject> SubjectsTable { get; set; }
         public DbSet<FacultySubject> FacultiesSubjectsTable { get; set; }
+        public DbSet<StudentSubject> StudentSubjectTable { get; set; }
+
 
         // kodo ir duombazes komunikavimo organizavimas
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -50,7 +52,18 @@ namespace StudyinAppEntity.Database
                 .WithMany(b => b.FacultiesSubjects)
                 .HasForeignKey(ab => ab.SubjectID);
 
+            modelBuilder.Entity<StudentSubject>()
+                .HasKey(ss => new { ss.StudentID, ss.SubjectID });
 
+            modelBuilder.Entity<StudentSubject>()
+                .HasOne(ss => ss.Student)
+                .WithMany(s => s.StudentSubjects)
+                .HasForeignKey(ss => ss.StudentID);
+
+            modelBuilder.Entity<StudentSubject>()
+                .HasOne(ss => ss.Subject)
+                .WithMany(s => s.SubjectStudents)
+                .HasForeignKey(ss => ss.SubjectID);
         }
             
 

@@ -37,8 +37,6 @@ namespace StudyinAppEntity.Models
             while (inputChoice == "+");
         }
 
-
-
         public void AddSubjecToFaculty(int subjectID) 
         {
             Console.Write("Kur bus dėstomda? (suvesti ID per kablelį)");
@@ -65,7 +63,38 @@ namespace StudyinAppEntity.Models
             }        
         }
 
+        public static void ShowSubjectsByFacultyID(int facID)
+        {
+            using var context = new StudiesContext();
 
+            var facultySubjects = context.FacultiesSubjectsTable.Where(f => f.FacultyID == facID).ToList();            
+
+            Console.WriteLine("Dalykų sąrašas:");
+
+            foreach (var facultySubject in facultySubjects)
+            {
+                var subjectName = context.SubjectsTable.Where(s => s.Id == facultySubject.SubjectID).Select(s => s.Title).FirstOrDefault(); 
+                Console.WriteLine($"pavadinimas -> {subjectName}, Subject ID: {facultySubject.SubjectID}");
+            }
+        }
+
+        public static void ShowSubjectsByStudent(string name)
+        {
+            using var context = new StudiesContext();
+
+            var studentSubjects = context.StudentSubjectTable.Where(ss => ss.Student.Name == name).ToList();
+
+            Console.Write("Studento fac:");
+            Console.WriteLine($"{(context.StudentsTable.FirstOrDefault(s => s.Name == name)).Direction}");
+
+            Console.WriteLine("Dalykų sąrašas:");
+
+            foreach (var subject in studentSubjects)
+            {
+                var subjectName = context.SubjectsTable.Where(s => s.Id == subject.SubjectID).Select(s => s.Title).FirstOrDefault();
+                Console.WriteLine($"-> {subjectName}");
+            }
+        }
         public int SubjectIdGetterByTitle(string title)
         {
             using var context = new StudiesContext();
@@ -102,5 +131,6 @@ namespace StudyinAppEntity.Models
             get { return FacultiesSubjects.Select(fs => fs.Faculty).ToList(); }
         }
 
+        public IList<StudentSubject> SubjectStudents { get; set; } = new List<StudentSubject>();
     }
 }

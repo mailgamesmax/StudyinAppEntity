@@ -23,14 +23,6 @@ namespace StudyinAppEntity.Models
             context.SaveChanges();
         }
 
- /*       public Faculty SelectFacultyByDirection(string direction) 
-        {
-            using var context = new StudiesContext();
-            var facultyByDirection = context.FacultiesTable.FirstOrDefault(f => f.Direction == direction);
-            return facultyByDirection;
-        }
-*/
-
         // savybes ir konstruktoriai
         public Faculty() { }
         

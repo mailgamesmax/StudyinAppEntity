@@ -29,6 +29,14 @@ namespace StudyinAppEntity
                     case 4:
                         changeStudentFaculty();
                         break;
+                    case 5:
+                        ShowFacultySubjects();
+                        break;
+                    case 6:
+                        ShowStudentSubjects();
+                        break;
+
+
                     case 0:
                     Console.WriteLine("chao");
                     Environment.Exit(0);
@@ -49,7 +57,9 @@ namespace StudyinAppEntity
             Console.WriteLine
                 (
             "\n\t0 - close program\n1 - prideti fakultete\n 2 - prideti dalyka/paskaita\n" +
-                "3 - prideti studenta\n 4 - duoti fuxui antra sansa"
+                "3 - prideti studenta\n 4 - duoti fuxui antra sansa\n" +
+                "5 - parodyti Fakulteto dalykus\n 6 - parodyti studento dalykus ir fakulteta\n" +
+                ""
         
                 );
         }
@@ -84,5 +94,18 @@ namespace StudyinAppEntity
             var student = new Student();
             student.changeStudentFaculty();
         }
+        public static void ShowFacultySubjects()
+        {
+            Console.Write("Faculty INT nr? ");
+            int inputedNr = int.Parse(Console.ReadLine());
+            Subject.ShowSubjectsByFacultyID(inputedNr);
+        }
+
+        public static void ShowStudentSubjects()
+        {
+            Console.Write("Student name? ");
+            string inputedName = Console.ReadLine();
+            Subject.ShowSubjectsByStudent(inputedName);
+        }       
     }
 }
